@@ -1,0 +1,40 @@
+/**
+ *将用户输入的字符进行大小写转化
+ * 比如：aBCd  => AbcD
+ */
+import java.util.Scanner;  //先导入Scanner这个类用来接受用户的键盘输入
+
+public class shu {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();    //nextLine读取一行，next的话遇空格就会截断
+        System.out.println(toggleCase(input));
+    }
+
+    // 大小写互换
+    public static String toggleCase(String input) {
+        StringBuilder sb = new StringBuilder();
+        /**StingBuilder与String的区别就是：前者可变，后者不可变
+         * String s = "abc";
+         * s = s + "d";
+         * 实际上发生的是：
+         * String s = "abc";
+         * String temp = s + "d";
+         * s = temp;   所以后者效率更快
+         */
+
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);   //用charAt方法进行遍历字符串
+
+            if (c >= 'a' && c <= 'z') {
+                c = (char) (c - 32);   // 小写 → 大写
+            } else if (c >= 'A' && c <= 'Z') {
+                c = (char) (c + 32);   // 大写 → 小写
+            }
+
+            sb.append(c);   //追加到sb，放回的是StringBuilder本身
+        }
+
+        return sb.toString();  //所以需要调用方法转化成字符串
+    }
+}
