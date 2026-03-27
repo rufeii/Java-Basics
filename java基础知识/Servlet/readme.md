@@ -1,70 +1,79 @@
 不知道怎么写！
 放点东西就行了
 
-参考：
-https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
-https://blog.csdn.net/qq_52173163/article/details/121110753
-
-#解释
-Servlet是运行在Web服务器或应用服务器上的程序,它是作为来自Web浏览器或其他HTTP客户端的请求和HTTP服务器上的数据库或应用程序之间的中间层。使用Servlet可以收集来自网页表单的用户输入，呈现来自数据库或者其他源的记录，还可以动态创建网页。本章内容详细讲解了web开发的相关内容以及servlet相关内容的配置使用,是JAVAEE开发的重中之重。
-
-#JavaEE-IDEA开发
-安装IDEA，激活后安装开发插件
-安装JDK,Tomcat,新建项目并配置
-
-#创建和使用Servlet
-1、创建一个类继承HttpServlet
-2、web.xml配置Servlet路由
-3、WebServlet配置Servlet路由
-
-#Servlet生命周期
-快捷键：alt+insert
-写入内置方法(init service(doget dopost等) destroy )
-
-#处理接受和回显
-●HttpServletRequest是ServletRequest的子接口
-getParameter(name) — String 通过name获得值
-getParameterValues — String[ ] 通过name获得多值
-●HttpServletResponse是ServletResponse的子接口 
-setCharacterEncoding() 设置编码格式
-setContentType() 设置解析语言
-getWriter() 获得一个PrintWriter字符输出流输出数据
-PrintWriter 接受符合类型数据
-
-#JavaEE-过滤器-Filter
-Filter被称为过滤器，过滤器实际上就是对Web资源进行拦截，做一些处理后再交给下一个过滤器或Servlet处理，通常都是用来拦截request进行处理的，也可以对返回的 response进行拦截处理。开发人员利用filter技术，可以实现对所有Web资源的管理，例如实现权限访问控制、过滤敏感词汇、压缩响应信息等一些高级功能。
-1、创建过滤器
-2、过滤器内置方法
-init  doFilter destroy
-3、过滤器触发流程
+Servlet & JavaEE 核心知识点
+参考链接：https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRghttps://blog.csdn.net/qq_52173163/article/details/121110753
+一、Servlet 概念解释
+Servlet 是运行在 Web 服务器或应用服务器上的程序，它是作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的中间层。使用 Servlet 可以：
+收集网页表单用户输入
+展示数据库 / 其他数据源记录
+动态创建网页
+本章为 JavaEE 开发核心重点。
+二、JavaEE-IDEA 开发环境
+安装 IDEA 并激活，安装开发插件
+安装 JDK、Tomcat
+新建项目并完成环境配置
+三、创建和使用 Servlet
+创建类继承 HttpServlet
+web.xml 配置 Servlet 路由
+@WebServlet 注解配置路由
+Servlet 生命周期
+快捷键：Alt+Insert内置核心方法：
+init()
+service() / doGet() / doPost()
+destroy()
+四、请求接收与响应回显
+HttpServletRequest（ServletRequest 子接口）
+getParameter(name)：根据 name 获取单值 String
+getParameterValues(name)：根据 name 获取多值 String []
+HttpServletResponse（ServletResponse 子接口）
+setCharacterEncoding()：设置编码
+setContentType()：设置解析语言类型
+getWriter()：获取 PrintWriter 输出流
+PrintWriter：输出各类响应数据
+五、JavaEE 过滤器 Filter
+Filter 用于拦截 Web 资源，处理 Request/Response 后转交后续组件；可实现权限控制、敏感词过滤、响应压缩等功能。
+1. 使用流程
+创建过滤器类
+内置方法：init / doFilter / destroy
+配置方式
+注解：
+java
+运行
 @WebFilter("/xss")
+xml 配置：
+xml
 <filter>
     <filter-name>xssFilter</filter-name>
-<filter-class>com.example.filter.xssFilter</filter-class>
+    <filter-class>com.example.filter.xssFilter</filter-class>
 </filter>
 <filter-mapping>
     <filter-name>xssFilter</filter-name>
     <url-pattern>/xss</url-pattern>
 </filter-mapping>
-4、过滤器安全场景
-Payload检测，权限访问控制，红队内存马植入，蓝队清理内存马等
-内存马参考：https://mp.weixin.qq.com/s/hev4G1FivLtqKjt0VhHKmw
-5、案例演示
-xss攻击的检测，管理页面的cookie检测
-
-#JavaEE-监听器-Listen
+2. 安全场景
+Payload 检测、权限访问控制红队：内存马植入蓝队：内存马清理内存马参考：https://mp.weixin.qq.com/s/hev4G1FivLtqKjt0VhHKmw
+3. 案例
+XSS 攻击检测、后台页面 Cookie 权限校验
+六、JavaEE 监听器 Listener
 参考：https://blog.csdn.net/qq_52797170/article/details/124023760
--监听ServletContext、HttpSession、ServletRequest等域对象创建和销毁事件
--监听域对象的属性发生修改的事件
--监听在事件发生前、发生后做一些必要的处理
-1、创建监听器
-2、监听器内置方法
-3、监听器触发流程
+监听ServletContext/HttpSession/ServletRequest域对象创建与销毁
+监听域对象属性修改事件
+事件前后自定义处理逻辑
+1. 使用流程
+创建监听器
+实现内置监听方法
+配置注册
+注解：
+java
+运行
 @WebListener
+xml 配置：
+xml
 <listener>
-    .......
+    <!-- 填写监听器全类名 -->
 </listener>
-4、监听器安全场景
-代码审计中分析执行逻辑触发操作，红队内存马植入，蓝队清理内存马等
-5、案例演示
-session存在的监听
+2. 安全场景
+代码审计逻辑分析、红队内存马植入、蓝队内存马排查清理
+3. 案例演示
+Session 状态监听
