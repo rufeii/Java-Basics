@@ -1,109 +1,131 @@
-不知道怎么写！
-放点东西就行了
+📌 一、Servlet 概念
 
-# Servlet & JavaEE 核心知识点
-参考链接：
-- https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
-- https://blog.csdn.net/qq_52173163/article/details/121110753
+Servlet 是运行在 Web 服务器或应用服务器上的程序，它充当：
 
----
+👉 Web 浏览器（客户端）
+👉 与 HTTP 服务器 / 数据库 / 应用程序之间的 中间层
 
-## 一、Servlet 概念解释
-Servlet 是运行在 Web 服务器或应用服务器上的程序，它是作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的中间层。
+主要作用
+接收网页表单的用户输入
+调用数据库或其他资源
+动态生成网页内容
 
-使用 Servlet 可以：
-- 收集网页表单用户输入
-- 展示数据库 / 其他数据源记录
-- 动态创建网页
+👉 属于 JavaEE 开发核心内容（重点）
 
-本章为 JavaEE 开发核心重点。
+🛠️ 二、JavaEE - IDEA 开发环境
+环境准备
+安装 IDEA（并激活）
+安装开发插件
+安装 JDK
+安装 Tomcat
+项目创建
+新建 Java Web 项目
+配置 Tomcat
+配置 JDK
+🚀 三、创建和使用 Servlet
+方式一：继承 HttpServlet
+public class TestServlet extends HttpServlet {
+}
+方式二：web.xml 配置路由
+<servlet>
+    <servlet-name>test</servlet-name>
+    <servlet-class>com.example.TestServlet</servlet-class>
+</servlet>
 
----
+<servlet-mapping>
+    <servlet-name>test</servlet-name>
+    <url-pattern>/test</url-pattern>
+</servlet-mapping>
+方式三：注解配置（推荐）
+@WebServlet("/test")
+🔄 四、Servlet 生命周期
+常用快捷键
 
-## 二、JavaEE-IDEA 开发环境
-1.  安装 IDEA 并激活，安装开发插件
-2.  安装 JDK、Tomcat
-3.  新建项目并完成环境配置
+Alt + Insert
 
----
+生命周期方法
+init()       // 初始化
+service()    // 处理请求（核心）
+doGet()      // 处理 GET 请求
+doPost()     // 处理 POST 请求
+destroy()    // 销毁
+📥 五、请求处理与回显
+1️⃣ HttpServletRequest（请求）
+getParameter(name)         // 获取单个参数
+getParameterValues(name)   // 获取多个参数
+2️⃣ HttpServletResponse（响应）
+setCharacterEncoding() // 设置编码
+setContentType()       // 设置响应类型
+getWriter()            // 获取输出流
+PrintWriter out = response.getWriter();
+out.print("hello");
+🧱 六、Filter（过滤器）
+📌 概念
 
-## 三、创建和使用 Servlet
-1.  创建类继承 `HttpServlet`
-2.  `web.xml` 配置 Servlet 路由
-3.  `@WebServlet` 注解配置路由
+Filter 是用于 拦截 Web 请求和响应 的组件。
 
-### Servlet 生命周期
-快捷键：`Alt+Insert`
-内置核心方法：
-- `init()`
-- `service()` / `doGet()` / `doPost()`
-- `destroy()`
+👉 本质：在请求到达 Servlet 前 / 响应返回前进行处理
 
----
-
-## 四、请求接收与响应回显
-### HttpServletRequest（ServletRequest 子接口）
-- `getParameter(name)`：根据 name 获取单值 `String`
-- `getParameterValues(name)`：根据 name 获取多值 `String[]`
-
-### HttpServletResponse（ServletResponse 子接口）
-- `setCharacterEncoding()`：设置编码
-- `setContentType()`：设置解析语言类型
-- `getWriter()`：获取 `PrintWriter` 输出流
-- `PrintWriter`：输出各类响应数据
-
----
-
-## 五、JavaEE 过滤器 Filter
-Filter 用于拦截 Web 资源，处理 Request/Response 后转交后续组件；可实现权限控制、敏感词过滤、响应压缩等功能。
-
-### 1. 使用流程
-1.  创建过滤器类
-2.  内置方法：`init` / `doFilter` / `destroy`
-3.  配置方式
-    - 注解：
-      ```java
-      @WebFilter("/xss")
-
-xml 配置：
-xml
+📌 常见用途
+权限控制
+XSS 检测
+敏感词过滤
+数据压缩
+安全防护（红蓝对抗）
+📌 创建过滤器
+注解方式
+@WebFilter("/xss")
+XML 配置方式
 <filter>
     <filter-name>xssFilter</filter-name>
     <filter-class>com.example.filter.xssFilter</filter-class>
 </filter>
+
 <filter-mapping>
     <filter-name>xssFilter</filter-name>
     <url-pattern>/xss</url-pattern>
 </filter-mapping>
-2. 安全场景
-Payload 检测、权限访问控制
-红队：内存马植入
-蓝队：内存马清理
-内存马参考：https://mp.weixin.qq.com/s/hev4G1FivLtqKjt0VhHKmw
-3. 案例
-XSS 攻击检测
-后台页面 Cookie 权限校验
-六、JavaEE 监听器 Listener
-参考：https://blog.csdn.net/qq_52797170/article/details/124023760
-监听 ServletContext/HttpSession/ServletRequest 域对象创建与销毁
-监听域对象属性修改事件
-事件前后自定义处理逻辑
-1. 使用流程
-创建监听器
-实现内置监听方法
-配置注册
-注解：
-java
-运行
+📌 生命周期方法
+init()
+doFilter()
+destroy()
+📌 执行流程
+请求 → Filter → Servlet → Filter → 响应
+📌 安全场景
+Payload 检测
+权限控制
+内存马植入（红队）
+内存马清理（蓝队）
+🎧 七、Listener（监听器）
+📌 概念
+
+用于监听 Web 应用中的 事件变化
+
+📌 监听对象
+ServletContext
+HttpSession
+ServletRequest
+📌 监听内容
+对象创建 / 销毁
+属性变化
+请求生命周期
+📌 创建方式
+注解方式
 @WebListener
-xml 配置：
-xml
+XML 配置
 <listener>
-    <listener-class>com.example.xxxListener</listener-class>
+    ...
 </listener>
-2. 安全场景
-代码审计逻辑分析
-红队：内存马植入
-蓝队：内存马排查清理
-3. 案例演示
-Session 状态监听
+📌 常用方法
+
+（根据不同 Listener 接口不同）
+
+📌 执行流程
+事件发生 → Listener 触发 → 执行逻辑
+📌 安全场景
+代码审计（分析触发链）
+内存马植入（红队）
+内存马清理（蓝队）
+📌 示例
+Session 创建监听
+Session 销毁监听
