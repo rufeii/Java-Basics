@@ -1,10 +1,5 @@
 # JavaEE - Servlet / Filter / Listener 笔记
 
-## 一、Servlet
-
-### 1. 创建方式
-
-#### 注解方式（推荐）
 ```java
 @WebServlet("/test")
 XML 配置方式
